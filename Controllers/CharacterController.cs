@@ -13,7 +13,7 @@ namespace RPG.Controllers
         private static Character character=new Character();
 
         [HttpGet(Name ="GetCharacter")]
-        public IActionResult Get(){
+        public ActionResult<Character> Get(){
             return Ok(character);
         }
     }
