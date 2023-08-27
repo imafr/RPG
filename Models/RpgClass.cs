@@ -5,7 +5,7 @@ namespace RPG.Models
     /// <summary>
     /// Show enum variable Name instead of value in SWagger
     /// </summary>
-   // [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RpgClass
     {
         Knight,

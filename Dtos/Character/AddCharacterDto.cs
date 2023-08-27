@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RPG.Models
+namespace RPG.Dtos.Character
 {
-    public class Character
+    // Request DTO
+    public class AddCharacterDto
     {
         // default vallue at context of any int input is 0 ,if we not intialize
         public int Id { get; set;}=1;// but here 1 is not default value it is intial value
@@ -15,5 +16,5 @@ namespace RPG.Models
         public int Defense { get; set; }
         public int Intelligence { get; set; }
         public RpgClass Class { get; set; }=RpgClass.Knight;
-        }
+    }
 }
