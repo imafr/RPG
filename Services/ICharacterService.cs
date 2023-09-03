@@ -10,9 +10,16 @@ namespace RPG.Services
     // The 'async' modifier can only be used in methods that have a body.--CS1994
         public Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacterWithOutSchema();
         public Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacter();
+
         public Task<ServiceResponse<GetCharacterDto>> GetCharacter(int id);
+
         public Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id);
+
         public Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
+
+        public Task<ServiceResponse<List<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updateCharacter);
+
+        public Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacterById(int id);
         
     }
 }

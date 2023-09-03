@@ -11,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Manually Added
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// Scope for that , CharacterService Provides implementaion
 builder.Services.AddScoped<ICharacterService,CharacterService>();
 
 var app = builder.Build();

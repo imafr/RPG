@@ -2,9 +2,8 @@ using AutoMapper;
 using RPG.Dtos.Character;
 namespace RPG.Services;
 
-public class CharacterService : ICharacterService
-    {
-        
+public class CharacterService : ICharacterService 
+    { 
         private static List<Character> characters=new List<Character>{
             new Character{Id=0,},
             new Character{
@@ -16,6 +15,7 @@ public class CharacterService : ICharacterService
                 Name="Salman",
                 Class=RpgClass.Clerica,
             }};
+
     private readonly IMapper _mapper;
 
     public CharacterService(IMapper mapper)
@@ -26,7 +26,7 @@ public class CharacterService : ICharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacterWithOutSchema()
         {
             ServiceResponse<List<GetCharacterDto>> serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data=characters.Select(c =>_mapper.Map<GetCharacterDto>(c)).ToList();
+            serviceResponse.Data=characters.Select(c =>_mapper.Map<GetCharacterDto>(c)).ToList();  // Internely a for loop is run 
             return serviceResponse;
         }
 
@@ -59,8 +59,64 @@ public class CharacterService : ICharacterService
         {
             var serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
             characters.Add(_mapper.Map<Character>(newCharacter));
+
             serviceResponse.Data=characters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToList();
+
             return serviceResponse;
         }
 
+
+
+    public async Task<ServiceResponse<List<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updateCharacter){
+
+        var serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
+        var character=characters.FirstOrDefault(c => c.Id == updateCharacter.Id );
+
+        try 
+        {
+            if(character is null) throw new Exception($"Character with Id '{updateCharacter.Id}' not found.");
+
+            /*character.Name=updateCharacter.Name;
+                character.HitPoints=updateCharacter.HitPoints;
+                character.Strength=updateCharacter.Strength;
+                character.Defense=updateCharacter.Defense;
+                character.Intelligence=updateCharacter.Intelligence;
+                character.Class=updateCharacter.Class; */
+
+         _mapper.Map(updateCharacter,character);   // AutoMapperProfile : Profile work with referenace variable (source,destination)           
+                            /*// V/S //*/
+        serviceResponse.Data=characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();  // Only Work with Types(Class) (Destination , Source)
+
         }
+
+        catch(Exception ex){ 
+            serviceResponse.Success=false;
+            serviceResponse.Message=ex.Message;
+        }
+
+        return serviceResponse;
+    }
+    
+    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacterById(int id)
+    {   
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        
+
+        try{
+
+            var character=characters.First(c => c.Id == id)!;
+
+            characters.Remove(character);
+        
+            serviceResponse.Data=characters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToList();
+
+        }
+
+        catch(Exception ex) {
+            serviceResponse.Success=false;
+            serviceResponse.Message=ex.Message;
+        }
+        
+        return serviceResponse;
+    }
+}
