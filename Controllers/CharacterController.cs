@@ -9,6 +9,7 @@ namespace RPG.Controllers;
     public class CharacterController : ControllerBase
     {
         private readonly ICharacterService _characterService;
+        
 
         public CharacterController(ICharacterService characterService)
         {

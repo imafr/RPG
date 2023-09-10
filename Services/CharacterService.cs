@@ -1,5 +1,8 @@
 using AutoMapper;
 using RPG.Dtos.Character;
+using  RPG.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace RPG.Services;
 
 public class CharacterService : ICharacterService 
@@ -17,30 +20,40 @@ public class CharacterService : ICharacterService
             }};
 
     private readonly IMapper _mapper;
+    private readonly DataContext _dataContext;
 
-    public CharacterService(IMapper mapper)
+    public CharacterService(IMapper mapper, DataContext dataContext)
         {
         _mapper = mapper;
+        _dataContext = dataContext;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacterWithOutSchema()
         {
             ServiceResponse<List<GetCharacterDto>> serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data=characters.Select(c =>_mapper.Map<GetCharacterDto>(c)).ToList();  // Internely a for loop is run 
+
+            List<Character> dbCharacters = await _dataContext.Characters.ToListAsync();
+
+            serviceResponse.Data = dbCharacters.Select(c =>_mapper.Map<GetCharacterDto>(c)).ToList();  // Internely a for loop is run 
+
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacter()
         {
             var serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data=characters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            var dbCharacters = await _dataContext.Characters.ToListAsync();
+
+            serviceResponse.Data=dbCharacters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacter(int id)
         {
             var serviceResponse=new ServiceResponse<GetCharacterDto>();
-            Character character=characters.First( c => c.Id == id);
+            var dbCharacters = await _dataContext.Characters.ToListAsync();
+
+            Character character=dbCharacters.First( c => c.Id == id);
             serviceResponse.Data=_mapper.Map<GetCharacterDto>(character);
             return serviceResponse;
         }
@@ -50,7 +63,9 @@ public class CharacterService : ICharacterService
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
         {
             var serviceResponse=  new ServiceResponse<GetCharacterDto>();
-            var character=characters.FirstOrDefault(c => c.Id==id)!;// '!' null-forgiving operator
+            var dbCharacters = await _dataContext.Characters.ToListAsync();
+
+            var character = dbCharacters.FirstOrDefault(c => c.Id==id);// '!' null-forgiving operator
             serviceResponse.Data=_mapper.Map<GetCharacterDto>(character); 
             return  serviceResponse;
         }
@@ -58,9 +73,12 @@ public class CharacterService : ICharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
         {
             var serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
-            characters.Add(_mapper.Map<Character>(newCharacter));
+            var character = _mapper.Map<Character>(newCharacter);
 
-            serviceResponse.Data=characters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToList();
+           _dataContext.Characters.Add(character);
+           await _dataContext.SaveChangesAsync();
+
+            serviceResponse.Data= await _dataContext.Characters.Select( c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
 
             return serviceResponse;
         }
@@ -76,7 +94,7 @@ public class CharacterService : ICharacterService
         {
             if(character is null) throw new Exception($"Character with Id '{updateCharacter.Id}' not found.");
 
-            /*character.Name=updateCharacter.Name;
+            /*  character.Name=updateCharacter.Name;
                 character.HitPoints=updateCharacter.HitPoints;
                 character.Strength=updateCharacter.Strength;
                 character.Defense=updateCharacter.Defense;
