@@ -40,7 +40,7 @@ namespace RPG.Controllers;
     // Difference First vs FirstOrdefault- (i) put non existting id and execute -> 1. 500 error(Throw Exception) , 2. 204 error (throw default value ,like -> null,0). 
 
         [HttpGet("GetCharacterBy{Id}*")]
-        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterById(int id){
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterById([FromRoute]int id){
             return Ok(await _characterService.GetCharacterById(id));
         }
 
@@ -50,9 +50,9 @@ namespace RPG.Controllers;
         }
         
         [HttpPut("PutCharacter")]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacter(int id,UpdateCharacterDto updateCharacter)
         {
-            var response  = await _characterService.UpdateCharacter(updateCharacter);
+            var response  = await _characterService.UpdateCharacter(id,updateCharacter);
 
             if(response.Data is null)
                 return NotFound(response);

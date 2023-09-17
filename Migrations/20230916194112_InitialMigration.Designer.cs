@@ -11,8 +11,8 @@ using RPG.Data;
 namespace RPG.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230906181500_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230916194112_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

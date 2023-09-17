@@ -8,7 +8,7 @@ namespace RPG.Models
     public class Character
     {
         // default vallue at context of any int input is 0 ,if we not intialize
-        public int Id { get; set;}=1;// but here 1 is not default value it is intial value
+        public int Id { get; set;}// but here 1 is not default value it is intial value
         public string Name { get; set; }="Afridi";
         public int HitPoints { get; set; }=100;
         public int Strength { get; set; }
