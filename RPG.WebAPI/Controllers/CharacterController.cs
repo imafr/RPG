@@ -50,7 +50,7 @@ namespace RPG.Controllers;
         }
         
         [HttpPut("PutCharacter")]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacter(int id,UpdateCharacterDto updateCharacter)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacter(int id,CharacterUpdateRequestDto updateCharacter)
         {
             var response  = await _characterService.UpdateCharacter(id,updateCharacter);
 

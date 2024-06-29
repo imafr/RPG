@@ -105,7 +105,7 @@ public class CharacterService : ICharacterService
 
 
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> UpdateCharacter(int id,UpdateCharacterDto updateCharacter){
+    public async Task<ServiceResponse<List<GetCharacterDto>>> UpdateCharacter(int id,CharacterUpdateRequestDto updateCharacter){
 
         var serviceResponse=new ServiceResponse<List<GetCharacterDto>>();
         var character=_dataContext.Characters.FirstOrDefault(c => c.Id == id );

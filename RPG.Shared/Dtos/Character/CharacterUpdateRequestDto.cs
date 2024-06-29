@@ -1,6 +1,6 @@
 namespace RPG.Dtos.Character
 {
-    public class UpdateCharacterDto
+    public class CharacterUpdateRequestDto
     {
          public string Name { get; set; }
         public int HitPoints { get; set; }
