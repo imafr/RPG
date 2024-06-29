@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RPG.WebAPI.Dtos.Character;
 using RPG.WebAPI.Models;
 using RPG.WebAPI.Data;
+using RPG.Shared.Dtos.Character;
 
 namespace RPG.WebAPI.Services;
 
@@ -17,29 +17,29 @@ public class CharacterService : ICharacterService
         _dataContext = dataContext;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacterWithOutSchema()
+    public async Task<ServiceResponse<List<CharacterResponseDto>>> GetAllCharacterWithOutSchema()
     {
-        ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        ServiceResponse<List<CharacterResponseDto>> serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
 
         List<Character> dbCharacters = await _dataContext.Characters.ToListAsync();
 
-        serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();  // Internely a for loop is run 
+        serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList();  // Internely a for loop is run 
 
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacter()
+    public async Task<ServiceResponse<List<CharacterResponseDto>>> GetAllCharacter()
     {
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
         var dbCharacters = await _dataContext.Characters.ToListAsync();
 
-        serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+        serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList();
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> GetCharacter(int id)
+    public async Task<ServiceResponse<CharacterResponseDto>> GetCharacter(int id)
     {
-        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+        var serviceResponse = new ServiceResponse<CharacterResponseDto>();
         var dbCharacters = await _dataContext.Characters.ToListAsync();
 
         try
@@ -48,7 +48,7 @@ public class CharacterService : ICharacterService
 
             if (character is null) throw new Exception($"Character with {id} not found.");
 
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            serviceResponse.Data = _mapper.Map<CharacterResponseDto>(character);
 
         }
 
@@ -64,9 +64,9 @@ public class CharacterService : ICharacterService
 
     // Difference First vs FirstOrdefault- (i) put non existting id and execute -> 1. 500 error(Throw Exception) , 2. 204 error (throw default value ,like -> null,0) or 400 error. 
 
-    public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
+    public async Task<ServiceResponse<CharacterResponseDto>> GetCharacterById(int id)
     {
-        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+        var serviceResponse = new ServiceResponse<CharacterResponseDto>();
         var dbCharacters = await _dataContext.Characters.ToListAsync();
 
 
@@ -77,7 +77,7 @@ public class CharacterService : ICharacterService
 
             if (character is null) throw new Exception($"Character with {id} not found.");
 
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            serviceResponse.Data = _mapper.Map<CharacterResponseDto>(character);
 
         }
 
@@ -91,25 +91,25 @@ public class CharacterService : ICharacterService
 
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
+    public async Task<ServiceResponse<List<CharacterResponseDto>>> AddCharacter(CharacterCreateRequestDto newCharacter)
     {
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
         var character = _mapper.Map<Character>(newCharacter);
 
         _dataContext.Characters.Add(character);
         await _dataContext.SaveChangesAsync();
 
-        serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
+        serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToListAsync();
 
         return serviceResponse;
     }
 
 
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> UpdateCharacter(int id, CharacterUpdateRequestDto updateCharacter)
+    public async Task<ServiceResponse<List<CharacterResponseDto>>> UpdateCharacter(int id, CharacterUpdateRequestDto updateCharacter)
     {
 
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
         var character = _dataContext.Characters.FirstOrDefault(c => c.Id == id);
 
         try
@@ -126,7 +126,7 @@ public class CharacterService : ICharacterService
             _mapper.Map(updateCharacter, character);   // AutoMapperProfile : Profile work with referenace variable (source,destination)           
             /*// V/S //*/
             await _dataContext.SaveChangesAsync();
-            serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();  // Only Work with Types(Class) (Destination , Source)
+            serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToListAsync();  // Only Work with Types(Class) (Destination , Source)
 
         }
 
@@ -139,9 +139,9 @@ public class CharacterService : ICharacterService
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacterById(int id)
+    public async Task<ServiceResponse<List<CharacterResponseDto>>> DeleteCharacterById(int id)
     {
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
 
 
         try
@@ -154,7 +154,7 @@ public class CharacterService : ICharacterService
             _dataContext.Characters.Remove(character);
             await _dataContext.SaveChangesAsync();
 
-            serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
+            serviceResponse.Data = await _dataContext.Characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToListAsync();
 
         }
 
