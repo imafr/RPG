@@ -1,7 +1,6 @@
-global using RPG.Models;
 using Microsoft.EntityFrameworkCore;
-using RPG.Data;
-using RPG.Services;
+using RPG.WebAPI.Data;
+using RPG.WebAPI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);

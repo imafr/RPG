@@ -1,8 +1,10 @@
-namespace RPG.Dtos.Character
+using RPG.WebAPI.Models;
+
+namespace RPG.WebAPI.Dtos.Character
 {
     public class CharacterUpdateRequestDto
     {
-         public string Name { get; set; }
+        public string Name { get; set; }
         public int HitPoints { get; set; }
         public int Strength { get; set; }
         public int Defense { get; set; }

@@ -1,15 +1,16 @@
+using RPG.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RPG.Dtos.Character
+namespace RPG.WebAPI.Dtos.Character
 {
     // Response DTO
     public class GetCharacterDto
     {
         // default vallue at context of any int input is 0 ,if we not intialize
-        public int Id { get; set;}
+        public int Id { get; set; }
         public string Name { get; set; }
         public int HitPoints { get; set; }
         public int Strength { get; set; }
