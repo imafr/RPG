@@ -24,10 +24,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore NuGet Packages
-      run: dotnet restore ./FormsReminder.sln
+      run: dotnet restore ./RPG.sln
 
     - name: Build Solution
-      run: dotnet build ./FormsReminder.sln --configuration Release --no-restore
+      run: dotnet build ./RPG.sln --configuration Release --no-restore
 
     - name: Publish Project
-      run: dotnet publish ./FormsReminder.sln --configuration Release --no-build --output "${{ env.AZURE_FUNCTION_PACKAGE_PATH }}"
+      run: dotnet publish ./RPG.sln --configuration Release --no-build --output "${{ env.AZURE_FUNCTION_PACKAGE_PATH }}"
